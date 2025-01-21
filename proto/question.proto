@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package question;
+
+message Question {
+    string id = 1;
+    string title = 2;
+    string type = 3;
+
+    oneof content {
+        MCQContent mcq = 4;
+        AnagramContent anagram = 5;
+        ReadAlongContent readAlong = 6;
+        ContentOnlyContent content_only = 7;
+    }
+}
+
+message MCQContent {
+    repeated Option options = 1;
+}
+
+message Option {
+    string text = 1;
+    bool isCorrectAnswer = 2;
+}
+
+message AnagramContent {
+    string solution = 1;
+    repeated AnagramBlock blocks = 2;
+}
+
+message AnagramBlock {
+    string text = 1;
+    bool showInOption = 2;
+    bool isAnswer = 3;
+}
+message ReadAlongContent {
+}
+message ContentOnlyContent{}
+message SearchReq {
+    string query = 1;
+    int32 page = 2;
+    int32 limit = 3;
+}
+
+message SearchRes {
+    repeated Question questions = 1;
+    int32 totalCount = 2;
+}
+
+service QuestionService {
+    rpc SearchQues(SearchReq) returns (SearchRes);
+}
